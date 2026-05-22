@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>汉语练习 · Luyện Dịch Việt–Trung HSK</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f0e0c;
+  --surface: #1a1916;
+  --card: #211f1b;
+  --border: #2e2b26;
+  --border2: #3d3930;
+  --text: #f0ead8;
+  --text2: #a09880;
+  --text3: #5a5548;
+  --gold: #c9a84c;
+  --gold2: #e8c96a;
+  --red: #c0392b;
+  --red2: #e05a4e;
+  --green: #2ecc71;
+  --radius: 14px;
+
+  --hsk1: #4a9eff;
+  --hsk2: #2ecc71;
+  --hsk3: #f39c12;
+  --hsk4: #9b59b6;
+  --hsk5: #e74c3c;
+  --hsk6: #c9a84c;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Ambient glow */
+.ambient {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  opacity: 0.12;
+  z-index: 0;
+}
+.amb1 { width: 500px; height: 500px; background: var(--gold); top: -100px; right: -100px; }
+.amb2 { width: 400px; height: 400px; background: #c0392b; bottom: -100px; left: -100px; }
+
+/* Layout */
+.wrap { position: relative; z-index: 1; max-width: 780px; margin: 0 auto; padding: 0 1.5rem 5rem; }
+
+/* Header */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.75rem 0 1.5rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2rem;
+}
+
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.brand-zh {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0.05em;
+}
+
+.brand-vi {
+  font-size: 13px;
+  color: var(--text2);
+  letter-spacing: 0.04em;
+}
+
+.streak-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 20px;
+  padding: 5px 14px;
+  font-size: 13px;
+  color: var(--text2);
+}
+.streak-num { color: var(--gold2); font-weight: 500; }
+
+/* Level selector */
+.level-section { margin-bottom: 2rem; }
+
+.level-label {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 0.75rem;
+}
+
+.level-grid {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.level-btn {
+  flex: 1;
+  min-width: 80px;
+  padding: 10px 8px;
+  border-radius: 10px;
+  border: 1px solid var(--border2);
+  background: var(--surface);
+  color: var(--text2);
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.level-btn .lv-name { display: block; font-size: 11px; opacity: 0.6; margin-top: 2px; }
+
+.level-btn::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.level-btn:hover { border-color: var(--border2); color: var(--text); background: var(--card); }
+
+.level-btn.active { color: var(--text); border-color: transparent; }
+
+.level-btn[data-lv="1"] { --lc: var(--hsk1); }
+.level-btn[data-lv="2"] { --lc: var(--hsk2); }
+.level-btn[data-lv="3"] { --lc: var(--hsk3); }
+.level-btn[data-lv="4"] { --lc: var(--hsk4); }
+.level-btn[data-lv="5"] { --lc: var(--hsk5); }
+.level-btn[data-lv="6"] { --lc: var(--hsk6); }
+
+.level-btn::before { background: var(--lc); }
+.level-btn.active { background: var(--card); border-color: var(--lc); box-shadow: 0 0 16px -4px var(--lc); }
+.level-btn.active::before { opacity: 1; }
+.level-btn.active .lv-badge { color: var(--lc); }
+
+.lv-badge { font-weight: 700; font-size: 16px; display: block; margin-bottom: 2px; }
+
+/* Progress */
+.progress-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.5rem;
+}
+.prog-label { font-size: 12px; color: var(--text3); letter-spacing: 0.06em; text-transform: uppercase; }
+.prog-count { font-size: 13px; color: var(--text2); }
+
+.progress-track {
+  height: 2px;
+  background: var(--border);
+  border-radius: 1px;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 1px;
+  background: var(--lc, var(--gold));
+  transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* Main card */
+.ex-card {
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  padding: 2rem;
+  margin-bottom: 1.25rem;
+  animation: cardIn 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.topic-tag {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: rgba(201,168,76,0.1);
+  color: var(--gold);
+  border: 1px solid rgba(201,168,76,0.2);
+}
+
+.card-num {
+  font-size: 12px;
+  color: var(--text3);
+}
+
+.vi-text {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px;
+  line-height: 1.5;
+  color: var(--text);
+  margin-bottom: 1.75rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.input-label {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 0.6rem;
+}
+
+.input-row { display: flex; gap: 10px; }
+
+input[type="text"] {
+  flex: 1;
+  font-family: 'Noto Serif SC', serif;
+  font-size: 18px;
+  padding: 11px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+input[type="text"]::placeholder { color: var(--text3); font-size: 15px; font-family: 'DM Sans', sans-serif; }
+input[type="text"]:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,0.1); }
+
+.btn {
+  padding: 11px 18px;
+  border-radius: 10px;
+  border: 1px solid var(--border2);
+  background: var(--surface);
+  color: var(--text2);
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.btn:hover { color: var(--text); border-color: var(--gold); }
+.btn:disabled { opacity: 0.3; cursor: default; }
+
+.btn-primary {
+  background: var(--gold);
+  color: #1a1610;
+  border-color: var(--gold);
+  font-weight: 600;
+}
+.btn-primary:hover { background: var(--gold2); border-color: var(--gold2); color: #1a1610; }
+
+/* Answer reveal */
+.answer-box {
+  margin-top: 1.25rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--surface);
+  border-radius: 10px;
+  border-left: 3px solid var(--gold);
+  display: none;
+  animation: fadeIn 0.25s ease;
+}
+.answer-box.show { display: block; }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.ans-zh {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 23px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 6px;
+  line-height: 1.5;
+}
+
+.ans-py {
+  font-size: 14px;
+  color: var(--gold);
+  margin-bottom: 10px;
+  font-style: italic;
+  opacity: 0.85;
+}
+
+.ans-vocab {
+  margin-bottom: 8px;
+}
+.vocab-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text3);
+  margin-bottom: 5px;
+}
+.vocab-item {
+  display: inline-block;
+  font-size: 13px;
+  background: rgba(201,168,76,0.08);
+  border: 1px solid rgba(201,168,76,0.15);
+  border-radius: 6px;
+  padding: 3px 10px;
+  margin: 3px 4px 3px 0;
+  color: var(--text2);
+  line-height: 1.6;
+}
+.vocab-item strong { color: var(--gold2); font-weight: 500; }
+
+.ans-grammar {
+  font-size: 13px;
+  color: var(--text2);
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+  padding: 8px 12px;
+  line-height: 1.7;
+  border: 1px solid var(--border);
+}
+.grammar-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text3);
+  display: block;
+  margin-bottom: 4px;
+}
+
+/* Nav */
+.nav-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.dots {
+  display: flex;
+  gap: 5px;
+}
+.dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--border2);
+  transition: all 0.3s;
+}
+.dot.done { background: var(--gold); opacity: 0.5; }
+.dot.active { background: var(--gold2); transform: scale(1.5); }
+
+/* Loading state */
+.loading-overlay {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  gap: 1rem;
+}
+.loading-overlay.show { display: flex; }
+
+.spinner {
+  width: 36px; height: 36px;
+  border: 2px solid var(--border2);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.loading-text {
+  font-size: 14px;
+  color: var(--text2);
+  font-family: 'Noto Serif SC', serif;
+}
+.loading-sub { font-size: 12px; color: var(--text3); margin-top: 2px; font-family: 'DM Sans', sans-serif; }
+
+/* Error */
+.error-box {
+  display: none;
+  background: rgba(192,57,43,0.1);
+  border: 1px solid rgba(192,57,43,0.3);
+  border-radius: 10px;
+  padding: 1.25rem;
+  text-align: center;
+  color: var(--red2);
+  font-size: 14px;
+  line-height: 1.6;
+}
+.error-box.show { display: block; }
+.error-box .err-title { font-weight: 600; margin-bottom: 0.5rem; }
+.error-box input {
+  margin-top: 1rem;
+  font-size: 14px;
+  background: rgba(255,255,255,0.05);
+  padding: 8px 12px;
+  border: 1px solid rgba(192,57,43,0.3);
+  border-radius: 8px;
+  color: var(--text);
+  width: 100%;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* Done screen */
+.done-screen {
+  display: none;
+  text-align: center;
+  padding: 3rem 1rem;
+  animation: cardIn 0.4s ease;
+}
+.done-screen.show { display: block; }
+
+.done-zh {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+}
+.done-py { font-size: 14px; color: var(--text2); margin-bottom: 1.5rem; font-style: italic; }
+.done-title { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--text); margin-bottom: 0.5rem; }
+.done-sub { font-size: 14px; color: var(--text2); margin-bottom: 2rem; line-height: 1.7; }
+
+.done-stats {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+.stat {
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  min-width: 100px;
+}
+.stat-n { font-size: 28px; font-weight: 600; color: var(--gold); margin-bottom: 2px; }
+.stat-l { font-size: 12px; color: var(--text3); }
+
+.done-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+/* API key banner */
+.api-banner {
+  background: rgba(201,168,76,0.07);
+  border: 1px solid rgba(201,168,76,0.2);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.6;
+  display: none;
+}
+.api-banner.show { display: block; }
+.api-banner strong { color: var(--gold); }
+.api-banner input {
+  margin-top: 0.75rem;
+  width: 100%;
+  font-size: 13px;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  outline: none;
+}
+.api-banner input:focus { border-color: var(--gold); }
+.api-save {
+  margin-top: 8px;
+  padding: 7px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--gold);
+  background: transparent;
+  color: var(--gold);
+  cursor: pointer;
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.2s;
+}
+.api-save:hover { background: rgba(201,168,76,0.1); }
+
+@media (max-width: 600px) {
+  .vi-text { font-size: 18px; }
+  .ans-zh { font-size: 19px; }
+  .level-btn { min-width: 60px; font-size: 12px; }
+  .lv-badge { font-size: 14px; }
+}
+</style>
+</head>
+<body>
+
+<div class="ambient amb1"></div>
+<div class="ambient amb2"></div>
+
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <span class="brand-zh">汉语练习</span>
+      <span class="brand-vi">Luyện Dịch Việt – Trung</span>
+    </div>
+    <div class="streak-pill">
+      🔥 Ngày thứ <span class="streak-num" id="streak">1</span>
+    </div>
+  </header>
+
+  <!-- API Key Banner -->
+  <div class="api-banner show" id="api-banner">
+    <strong>Nhập Anthropic API Key</strong> để app tự sinh câu mới vô hạn bằng AI.<br>
+    Key chỉ lưu trong máy bạn (localStorage), không gửi đi đâu khác.
+    <input type="password" id="api-key-input" placeholder="sk-ant-..." />
+    <button class="api-save" onclick="saveKey()">Lưu & bắt đầu →</button>
+  </div>
+
+  <!-- Level selector -->
+  <div class="level-section">
+    <div class="level-label">Chọn cấp độ</div>
+    <div class="level-grid">
+      <button class="level-btn active" data-lv="1" onclick="setLevel(1,this)">
+        <span class="lv-badge">HSK1</span>
+        <span class="lv-name">Sơ cấp</span>
+      </button>
+      <button class="level-btn" data-lv="2" onclick="setLevel(2,this)">
+        <span class="lv-badge">HSK2</span>
+        <span class="lv-name">Cơ bản</span>
+      </button>
+      <button class="level-btn" data-lv="3" onclick="setLevel(3,this)">
+        <span class="lv-badge">HSK3</span>
+        <span class="lv-name">Trung cấp</span>
+      </button>
+      <button class="level-btn" data-lv="4" onclick="setLevel(4,this)">
+        <span class="lv-badge">HSK4</span>
+        <span class="lv-name">Trung cao</span>
+      </button>
+      <button class="level-btn" data-lv="5" onclick="setLevel(5,this)">
+        <span class="lv-badge">HSK5</span>
+        <span class="lv-name">Cao cấp</span>
+      </button>
+      <button class="level-btn" data-lv="6" onclick="setLevel(6,this)">
+        <span class="lv-badge">HSK6</span>
+        <span class="lv-name">Thành thạo</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-row">
+    <span class="prog-label">Tiến độ</span>
+    <span class="prog-count" id="prog-text">— / 10</span>
+  </div>
+  <div class="progress-track">
+    <div class="progress-fill" id="prog-fill" style="width:0%"></div>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading-overlay" id="loading">
+    <div class="spinner"></div>
+    <div>
+      <div class="loading-text">AI đang tạo câu luyện...</div>
+      <div class="loading-sub">Vui lòng đợi trong giây lát</div>
+    </div>
+  </div>
+
+  <!-- Error -->
+  <div class="error-box" id="error-box">
+    <div class="err-title">⚠ Không thể tạo câu</div>
+    <div id="error-msg">Kiểm tra API key và kết nối mạng.</div>
+    <button class="btn btn-primary" style="margin-top:1rem" onclick="loadSet()">Thử lại</button>
+  </div>
+
+  <!-- Exercise -->
+  <div id="exercise-area" style="display:none">
+    <div class="ex-card" id="ex-card">
+      <div class="card-top">
+        <span class="topic-tag" id="topic-tag">—</span>
+        <span class="card-num" id="card-num">1 / 10</span>
+      </div>
+      <div class="vi-text" id="vi-text"></div>
+      <div class="input-label">Bản dịch tiếng Trung của bạn</div>
+      <div class="input-row">
+        <input type="text" id="user-input" placeholder="输入中文翻译..." autocomplete="off" />
+        <button class="btn" onclick="reveal()">Đáp án</button>
+      </div>
+      <div class="answer-box" id="answer-box">
+        <div class="ans-zh" id="ans-zh"></div>
+        <div class="ans-py" id="ans-py"></div>
+        <div class="ans-vocab">
+          <div class="vocab-label">Từ vựng</div>
+          <div id="ans-vocab"></div>
+        </div>
+        <div class="ans-grammar">
+          <span class="grammar-label">Ngữ pháp</span>
+          <span id="ans-grammar"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn" id="btn-prev" onclick="prev()">← Trước</button>
+      <div class="dots" id="dots"></div>
+      <button class="btn btn-primary" id="btn-next" onclick="next()">Tiếp →</button>
+    </div>
+  </div>
+
+  <!-- Done -->
+  <div class="done-screen" id="done-screen">
+    <div class="done-zh">很好！</div>
+    <div class="done-py">Hěn hǎo! — Rất tốt!</div>
+    <div class="done-title">Hoàn thành 10 câu!</div>
+    <div class="done-sub">Bạn đã luyện xong bộ câu hôm nay.<br>Nhấn "Bộ mới" để AI tạo thêm 10 câu ngay lập tức.</div>
+    <div class="done-stats">
+      <div class="stat"><div class="stat-n">10</div><div class="stat-l">Câu hoàn thành</div></div>
+      <div class="stat"><div class="stat-n" id="done-lv">HSK1</div><div class="stat-l">Cấp độ</div></div>
+      <div class="stat"><div class="stat-n" id="done-day">—</div><div class="stat-l">Ngày học</div></div>
+    </div>
+    <div class="done-btns">
+      <button class="btn" onclick="restart()">↺ Ôn lại</button>
+      <button class="btn btn-primary" onclick="loadSet()">✨ Bộ mới →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const HSK_INFO = {
+  1: { name: 'HSK 1', desc: 'Sơ cấp (~150 từ)', color: '#4a9eff' },
+  2: { name: 'HSK 2', desc: 'Cơ bản (~300 từ)', color: '#2ecc71' },
+  3: { name: 'HSK 3', desc: 'Trung cấp (~600 từ)', color: '#f39c12' },
+  4: { name: 'HSK 4', desc: 'Trung cao (~1200 từ)', color: '#9b59b6' },
+  5: { name: 'HSK 5', desc: 'Cao cấp (~2500 từ)', color: '#e74c3c' },
+  6: { name: 'HSK 6', desc: 'Thành thạo (~5000 từ)', color: '#c9a84c' },
+};
+
+const LEVEL_PROMPT = {
+  1: `HSK 1 (sơ cấp): Dùng chỉ ~150 từ HSK1. Câu rất đơn giản: chủ ngữ + động từ + tân ngữ. 3-6 từ. Chủ đề: chào hỏi, số đếm, gia đình, đồ vật cơ bản, màu sắc, thời gian đơn giản.`,
+  2: `HSK 2 (cơ bản): Dùng từ HSK1-2 (~300 từ). Câu đơn giản 6-10 từ. Có phó từ (很,也,还,太), so sánh đơn giản, hỏi đường cơ bản. Chủ đề: mua sắm đơn giản, thể thao, thời tiết cơ bản.`,
+  3: `HSK 3 (trung cấp): Dùng từ HSK1-3 (~600 từ). Câu 10-15 từ. Dùng kết cấu: 因为...所以, 虽然...但是, 又...又, 如果...就, 已经...了, 把字句 cơ bản. Chủ đề: công việc, sức khỏe, du lịch, cảm xúc.`,
+  4: `HSK 4 (trung cao): Dùng từ HSK1-4 (~1200 từ). Câu 12-18 từ. Dùng: 被字句, 把字句 phức tạp, 只有...才, 不管...都, 越来越, 对...来说, trạng ngữ phức hợp. Chủ đề: kinh tế, văn hóa, môi trường, xã hội.`,
+  5: `HSK 5 (cao cấp): Dùng từ HSK1-5 (~2500 từ). Câu 15-22 từ. Dùng: 尽管...还是, 即使...也, 不仅...而且, 就...而言, 与其...不如, câu phức nhiều vế. Chủ đề: khoa học, chính trị, triết học, văn học.`,
+  6: `HSK 6 (thành thạo): Dùng từ vựng phong phú HSK6. Câu 18-28 từ. Dùng thành ngữ, cấu trúc văn học, câu phức tạp như người bản ngữ. Chủ đề: học thuật, nghị luận, thời sự, văn chương.`,
+};
+
+let curLevel = 1;
+let sentences = [];
+let cur = 0;
+let apiKey = '';
+
+function getDay() {
+  return Math.floor((Date.now() - new Date('2025-01-01')) / 86400000) + 1;
+}
+
+function saveKey() {
+  const k = document.getElementById('api-key-input').value.trim();
+  if (!k.startsWith('sk-ant-') && !k.startsWith('sk-')) {
+    alert('API key không hợp lệ. Key bắt đầu bằng sk-ant-...');
+    return;
+  }
+  apiKey = k;
+  localStorage.setItem('anthropic_key', k);
+  document.getElementById('api-banner').classList.remove('show');
+  loadSet();
+}
+
+function loadStoredKey() {
+  const k = localStorage.getItem('anthropic_key');
+  if (k) {
+    apiKey = k;
+    document.getElementById('api-banner').classList.remove('show');
+    return true;
+  }
+  return false;
+}
+
+function setLevel(lv, btn) {
+  curLevel = lv;
+  document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const color = HSK_INFO[lv].color;
+  document.querySelector('.progress-fill').style.background = color;
+  if (apiKey) loadSet();
+}
+
+async function loadSet() {
+  document.getElementById('exercise-area').style.display = 'none';
+  document.getElementById('done-screen').classList.remove('show');
+  document.getElementById('error-box').classList.remove('show');
+  document.getElementById('loading').classList.add('show');
+
+  const prompt = `Tạo 10 mẫu câu luyện dịch Việt–Trung cho ${HSK_INFO[curLevel].name}.
+
+Yêu cầu cấp độ: ${LEVEL_PROMPT[curLevel]}
+
+Mỗi câu phải có chủ đề KHÁC NHAU. Tránh lặp lại câu đã dùng.
+
+Trả về JSON hợp lệ theo đúng format sau, KHÔNG có markdown, KHÔNG có text nào khác ngoài JSON:
+{
+  "sentences": [
+    {
+      "topic": "tên chủ đề ngắn (1-2 từ tiếng Việt)",
+      "vi": "câu tiếng Việt",
+      "zh": "câu tiếng Trung",
+      "py": "pinyin đầy đủ có dấu thanh",
+      "vocab": [
+        {"word": "từ TQ", "meaning": "nghĩa TV"}
+      ],
+      "grammar": "giải thích ngắn 1-2 câu về điểm ngữ pháp quan trọng trong câu"
+    }
+  ]
+}
+
+Chỉ trả về JSON. Không có bất kỳ text nào khác.`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 3000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error?.message || `HTTP ${res.status}`);
+    }
+
+    const data = await res.json();
+    const raw = data.content.map(c => c.text || '').join('');
+    const clean = raw.replace(/```json|```/g, '').trim();
+    const parsed = JSON.parse(clean);
+
+    sentences = parsed.sentences;
+    cur = 0;
+
+    document.getElementById('loading').classList.remove('show');
+    document.getElementById('exercise-area').style.display = 'block';
+    render();
+
+  } catch (e) {
+    document.getElementById('loading').classList.remove('show');
+    document.getElementById('error-box').classList.add('show');
+    document.getElementById('error-msg').textContent = e.message || 'Lỗi không xác định.';
+  }
+}
+
+function render() {
+  const d = sentences[cur];
+  document.getElementById('vi-text').textContent = d.vi;
+  document.getElementById('topic-tag').textContent = d.topic;
+  document.getElementById('card-num').textContent = (cur+1) + ' / 10';
+  document.getElementById('ans-zh').textContent = d.zh;
+  document.getElementById('ans-py').textContent = d.py;
+  document.getElementById('ans-grammar').textContent = d.grammar;
+
+  const vocabEl = document.getElementById('ans-vocab');
+  vocabEl.innerHTML = (d.vocab || []).map(v =>
+    `<span class="vocab-item"><strong>${v.word}</strong> = ${v.meaning}</span>`
+  ).join('');
+
+  document.getElementById('prog-text').textContent = (cur+1) + ' / 10';
+  document.getElementById('prog-fill').style.width = ((cur+1) * 10) + '%';
+  document.getElementById('answer-box').classList.remove('show');
+  document.getElementById('user-input').value = '';
+  document.getElementById('btn-prev').disabled = cur === 0;
+  document.getElementById('btn-next').textContent = cur === 9 ? 'Xong ✓' : 'Tiếp →';
+
+  const dots = document.getElementById('dots');
+  dots.innerHTML = '';
+  for (let i = 0; i < 10; i++) {
+    const el = document.createElement('div');
+    el.className = 'dot' + (i < cur ? ' done' : i === cur ? ' active' : '');
+    dots.appendChild(el);
+  }
+
+  const card = document.getElementById('ex-card');
+  card.style.animation = 'none';
+  card.offsetHeight;
+  card.style.animation = '';
+
+  document.getElementById('user-input').focus();
+}
+
+function reveal() {
+  document.getElementById('answer-box').classList.add('show');
+}
+
+function next() {
+  if (cur < 9) { cur++; render(); }
+  else {
+    document.getElementById('exercise-area').style.display = 'none';
+    document.getElementById('done-screen').classList.add('show');
+    document.getElementById('done-lv').textContent = 'HSK' + curLevel;
+    document.getElementById('done-day').textContent = getDay();
+  }
+}
+
+function prev() {
+  if (cur > 0) { cur--; render(); }
+}
+
+function restart() {
+  cur = 0;
+  document.getElementById('done-screen').classList.remove('show');
+  document.getElementById('exercise-area').style.display = 'block';
+  render();
+}
+
+// Keyboard
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.activeElement.id === 'user-input') reveal();
+  if (e.key === 'ArrowRight') next();
+  if (e.key === 'ArrowLeft') prev();
+});
+
+// Init
+document.getElementById('streak').textContent = getDay();
+document.getElementById('done-day').textContent = getDay();
+
+if (loadStoredKey()) {
+  loadSet();
+}
+</script>
+</body>
+</html>
