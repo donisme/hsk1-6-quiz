@@ -3,92 +3,179 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luyện từ vựng HSK 1-6</title>
+<title>HSK Vocab — Luyện từ vựng</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
+:root{
+  --purple:#7c3aed;
+  --purple-light:#ede9fe;
+  --purple-mid:#8b5cf6;
+  --purple-dark:#5b21b6;
+  --green:#16a34a;
+  --green-light:#dcfce7;
+  --red:#dc2626;
+  --red-light:#fee2e2;
+  --gray:#f8f7ff;
+  --border:#e5e7eb;
+  --text:#1e1b4b;
+  --muted:#6b7280;
+  --white:#ffffff;
+  --radius:16px;
+  --radius-sm:10px;
+  --shadow:0 2px 12px rgba(124,58,237,.08);
+  --shadow-lg:0 8px 32px rgba(124,58,237,.15);
+}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f4f0;color:#1a1a1a;min-height:100vh}
-.app{max-width:700px;margin:0 auto;padding:1.5rem 1rem}
-h1{font-size:20px;font-weight:600;margin-bottom:1.25rem}
-.level-tabs{display:flex;gap:.4rem;margin-bottom:1rem;flex-wrap:wrap}
-.tab{padding:.3rem .75rem;border:1px solid #ddd;border-radius:8px;font-size:13px;cursor:pointer;background:#fff;color:#555;transition:all .15s;white-space:nowrap}
-.tab.active{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
-.stats{display:flex;gap:.5rem;margin-bottom:1rem}
-.stat{background:#fff;border-radius:8px;padding:.5rem .75rem;flex:1;text-align:center;border:1px solid #e8e8e8}
-.stat-num{font-size:20px;font-weight:600}
-.stat-lbl{font-size:11px;color:#888;margin-top:1px}
-.mode-select{display:flex;gap:.4rem;margin-bottom:1rem;flex-wrap:wrap}
-.mode-btn{padding:.3rem .6rem;border:1px solid #ddd;border-radius:8px;font-size:12px;cursor:pointer;background:#fff;color:#555;flex:1;text-align:center}
-.mode-btn.active{border-color:#1a1a1a;color:#1a1a1a;font-weight:600}
-.prog-bar{height:4px;background:#e8e8e8;border-radius:2px;margin-bottom:1rem;overflow:hidden}
-.prog-fill{height:100%;background:#22c55e;border-radius:2px;transition:width .3s}
-.card{background:#fff;border:1px solid #e8e8e8;border-radius:12px;padding:1.5rem;margin-bottom:1rem;text-align:center;min-height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem}
-.hanzi{font-size:52px;line-height:1.1;cursor:pointer;color:#1a1a1a;user-select:none}
-.pinyin{font-size:15px;color:#888;min-height:22px}
-.meaning{font-size:17px;font-weight:500;min-height:26px}
-.hint{font-size:12px;color:#bbb;margin-top:.25rem}
-.example-box{background:#f8f8f6;border-radius:8px;padding:.75rem;margin-top:.5rem;width:100%;text-align:left}
-.ex-zh{font-size:14px;margin-bottom:.2rem}
-.ex-vn{font-size:13px;color:#666}
-.choices{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:1rem}
-.choice{padding:.65rem .75rem;border:1px solid #e8e8e8;border-radius:8px;font-size:13px;cursor:pointer;background:#fff;text-align:left;transition:all .12s;line-height:1.3}
-.choice:hover:not(:disabled){background:#f5f5f5}
-.choice.correct{background:#dcfce7;border-color:#86efac;color:#15803d}
-.choice.wrong{background:#fee2e2;border-color:#fca5a5;color:#dc2626}
-.input-row{display:flex;gap:.5rem;margin-bottom:.75rem}
-.ans-input{flex:1;padding:.55rem .8rem;border:1px solid #ddd;border-radius:8px;font-size:15px}
-.ans-input:focus{outline:none;border-color:#1a1a1a}
-.btn{padding:.55rem 1.1rem;border:1px solid #ddd;border-radius:8px;font-size:14px;cursor:pointer;background:#fff;transition:all .12s}
-.btn:hover{background:#f5f5f5}
-.btn.primary{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
-.btn.primary:hover{background:#333}
-.btn.ok{background:#dcfce7;border-color:#86efac;color:#15803d}
-.btn.bad{background:#fee2e2;border-color:#fca5a5;color:#dc2626}
-.feedback{padding:.5rem .9rem;border-radius:8px;font-size:14px;margin-bottom:.75rem;text-align:center}
-.feedback.ok{background:#dcfce7;color:#15803d}
-.feedback.bad{background:#fee2e2;color:#dc2626}
-.nav{display:flex;gap:.5rem;justify-content:center;align-items:center;padding-bottom:2rem}
-.badge{font-size:11px;padding:2px 8px;border-radius:6px;font-weight:600;display:inline-block;margin-bottom:.25rem}
+body{font-family:'Inter',sans-serif;background:var(--gray);color:var(--text);min-height:100vh}
+
+/* TOP BAR */
+.topbar{background:var(--white);border-bottom:1px solid var(--border);padding:0 1.5rem;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+.logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:18px;color:var(--purple)}
+.logo-icon{width:32px;height:32px;background:var(--purple);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px}
+.level-pills{display:flex;gap:6px;flex-wrap:wrap}
+.pill{padding:5px 14px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;border:1.5px solid var(--border);background:var(--white);color:var(--muted);transition:all .15s}
+.pill.active{background:var(--purple);border-color:var(--purple);color:#fff}
+.pill:hover:not(.active){border-color:var(--purple-mid);color:var(--purple)}
+
+/* MAIN */
+.main{max-width:680px;margin:0 auto;padding:1.5rem 1rem 4rem}
+
+/* STATS BAR */
+.stats-bar{display:flex;gap:10px;margin-bottom:1.25rem}
+.stat-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.6rem 1rem;flex:1;text-align:center;box-shadow:var(--shadow)}
+.stat-num{font-size:22px;font-weight:700;color:var(--text)}
+.stat-num.green{color:var(--green)}
+.stat-num.red{color:var(--red)}
+.stat-num.purple{color:var(--purple)}
+.stat-lbl{font-size:11px;color:var(--muted);margin-top:1px;font-weight:500}
+
+/* PROGRESS */
+.progress-row{display:flex;align-items:center;gap:10px;margin-bottom:1.25rem}
+.progress-bar{flex:1;height:6px;background:#e5e7eb;border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--purple-mid));border-radius:3px;transition:width .4s}
+.progress-lbl{font-size:12px;color:var(--muted);font-weight:500;white-space:nowrap}
+
+/* MODE TABS */
+.mode-tabs{display:flex;gap:0;margin-bottom:1.5rem;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);padding:4px;box-shadow:var(--shadow)}
+.mode-tab{flex:1;padding:.45rem .25rem;border-radius:7px;font-size:12px;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--muted);transition:all .15s;text-align:center}
+.mode-tab.active{background:var(--purple);color:#fff;box-shadow:0 2px 8px rgba(124,58,237,.3)}
+.mode-tab:hover:not(.active){color:var(--purple)}
+
+/* FLASHCARD */
+.flashcard{background:var(--white);border-radius:var(--radius);padding:2.5rem 2rem;margin-bottom:1.25rem;text-align:center;min-height:260px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.75rem;box-shadow:var(--shadow-lg);border:1px solid rgba(124,58,237,.08);cursor:pointer;transition:transform .1s,box-shadow .1s;position:relative;overflow:hidden}
+.flashcard::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--purple),var(--purple-mid))}
+.flashcard:active{transform:scale(.99)}
+.hanzi{font-size:64px;line-height:1;color:var(--text);font-weight:400;letter-spacing:-2px}
+.pinyin{font-size:16px;color:var(--purple-mid);font-weight:500;min-height:24px}
+.meaning{font-size:22px;font-weight:600;color:var(--text);min-height:32px}
+.tap-hint{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:4px;margin-top:.5rem}
+
+/* BADGE */
+.badge{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:600;position:absolute;top:16px;left:16px}
 .badge-hsk1{background:#eef2ff;color:#3730a3}
 .badge-hsk2{background:#e0fdf4;color:#065f46}
 .badge-hsk3{background:#fff7ed;color:#92400e}
 .badge-hsk4{background:#ede9fe;color:#5b21b6}
 .badge-hsk5{background:#fef3c7;color:#92400e}
 .badge-hsk6{background:#fce7f3;color:#9d174d}
+
+/* EXAMPLE BOX */
+.example-box{background:#f5f3ff;border-left:3px solid var(--purple-mid);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:.75rem 1rem;width:100%;text-align:left;margin-top:.5rem}
+.ex-zh{font-size:15px;color:var(--text);margin-bottom:.2rem;font-weight:500}
+.ex-vn{font-size:13px;color:var(--muted)}
+
+/* CHOICES */
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1rem}
+.choice{padding:.8rem 1rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:14px;font-weight:500;cursor:pointer;background:var(--white);color:var(--text);text-align:left;transition:all .12s;line-height:1.4}
+.choice:hover:not(:disabled){border-color:var(--purple-mid);background:#f5f3ff;color:var(--purple)}
+.choice.correct{background:var(--green-light);border-color:#86efac;color:var(--green)}
+.choice.wrong{background:var(--red-light);border-color:#fca5a5;color:var(--red)}
+.choice:disabled{cursor:default}
+
+/* INPUT */
+.input-wrap{display:flex;gap:.5rem;margin-bottom:.75rem}
+.ans-input{flex:1;padding:.7rem 1rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:16px;font-family:'Inter',sans-serif;color:var(--text);transition:border .15s;background:var(--white)}
+.ans-input:focus{outline:none;border-color:var(--purple);box-shadow:0 0 0 3px rgba(124,58,237,.1)}
+.ans-input.hanzi-input{font-size:24px;letter-spacing:4px;text-align:center}
+
+/* FEEDBACK */
+.feedback{padding:.65rem 1rem;border-radius:var(--radius-sm);font-size:14px;margin-bottom:.75rem;font-weight:500;display:flex;align-items:center;gap:.5rem}
+.feedback.ok{background:var(--green-light);color:var(--green)}
+.feedback.bad{background:var(--red-light);color:var(--red)}
+
+/* BUTTONS */
+.btn{padding:.65rem 1.25rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:14px;font-weight:600;cursor:pointer;background:var(--white);color:var(--text);transition:all .15s;font-family:'Inter',sans-serif}
+.btn:hover{border-color:var(--purple);color:var(--purple)}
+.btn.primary{background:var(--purple);color:#fff;border-color:var(--purple);box-shadow:0 2px 8px rgba(124,58,237,.3)}
+.btn.primary:hover{background:var(--purple-dark);border-color:var(--purple-dark)}
+.btn.ok{background:var(--green-light);border-color:#86efac;color:var(--green)}
+.btn.bad{background:var(--red-light);border-color:#fca5a5;color:var(--red)}
+
+/* NAV */
+.nav{display:flex;gap:.75rem;justify-content:center;align-items:center;margin-top:.5rem}
+.nav-lbl{font-size:13px;color:var(--muted);font-weight:500;padding:0 .5rem}
+
+/* LISTEN CARD */
+.listen-meaning{font-size:26px;font-weight:700;color:var(--text);margin:.5rem 0}
+.listen-sub{font-size:13px;color:var(--muted)}
+
+/* ANSWER CARD */
+.answer-card{background:var(--white);border-radius:var(--radius);padding:1.25rem;margin-bottom:.75rem;text-align:center;box-shadow:var(--shadow);border:1px solid rgba(124,58,237,.08)}
+
+/* SELF EVAL */
+.self-eval{display:flex;gap:.6rem;margin-bottom:.75rem}
+
 @media(max-width:480px){
-  .hanzi{font-size:44px}
+  .topbar{padding:0 1rem;flex-direction:column;height:auto;padding:10px 1rem;gap:8px}
+  .hanzi{font-size:52px}
   .choices{grid-template-columns:1fr}
-  .mode-btn{font-size:11px;padding:.3rem .4rem}
+  .mode-tab{font-size:11px;padding:.4rem .15rem}
+  .listen-meaning{font-size:22px}
 }
 </style>
 </head>
 <body>
-<div class="app">
-  <h1>🀄 Luyện từ vựng HSK 1-6</h1>
-  <div class="level-tabs">
-    <button class="tab active" onclick="setLevel('HSK1')">HSK 1 <small style="opacity:.6">(149)</small></button>
-    <button class="tab" onclick="setLevel('HSK2')">HSK 2 <small style="opacity:.6">(150)</small></button>
-    <button class="tab" onclick="setLevel('HSK3')">HSK 3 <small style="opacity:.6">(295)</small></button>
-    <button class="tab" onclick="setLevel('HSK4')">HSK 4 <small style="opacity:.6">(600)</small></button>
-    <button class="tab" onclick="setLevel('HSK5')">HSK 5 <small style="opacity:.6">(1295)</small></button>
-    <button class="tab" onclick="setLevel('HSK6')">HSK 6 <small style="opacity:.6">(2513)</small></button>
+
+<div class="topbar">
+  <div class="logo">
+    <div class="logo-icon">🀄</div>
+    HSK Vocab
   </div>
-  <div class="stats">
-    <div class="stat"><div class="stat-num" id="s-total">0</div><div class="stat-lbl">Tổng</div></div>
-    <div class="stat"><div class="stat-num" id="s-correct" style="color:#22c55e">0</div><div class="stat-lbl">Đúng</div></div>
-    <div class="stat"><div class="stat-num" id="s-wrong" style="color:#ef4444">0</div><div class="stat-lbl">Sai</div></div>
-    <div class="stat"><div class="stat-num" id="s-pct">—</div><div class="stat-lbl">Tỉ lệ</div></div>
+  <div class="level-pills">
+    <button class="pill active" onclick="setLevel('HSK1')">HSK 1</button>
+    <button class="pill" onclick="setLevel('HSK2')">HSK 2</button>
+    <button class="pill" onclick="setLevel('HSK3')">HSK 3</button>
+    <button class="pill" onclick="setLevel('HSK4')">HSK 4</button>
+    <button class="pill" onclick="setLevel('HSK5')">HSK 5</button>
+    <button class="pill" onclick="setLevel('HSK6')">HSK 6</button>
   </div>
-  <div class="mode-select">
-    <button class="mode-btn active" onclick="setMode('flashcard')">📖 Flashcard</button>
-    <button class="mode-btn" onclick="setMode('mc')">🔢 Trắc nghiệm</button>
-    <button class="mode-btn" onclick="setMode('type')">⌨️ Gõ nghĩa</button>
-    <button class="mode-btn" onclick="setMode('listen')">👂 Đọc→Nghĩa</button>
-    <button class="mode-btn" onclick="setMode('typehanzi')">✍️ Gõ chữ Hán</button>
+</div>
+
+<div class="main">
+  <div class="stats-bar">
+    <div class="stat-card"><div class="stat-num purple" id="s-total">0</div><div class="stat-lbl">Đã học</div></div>
+    <div class="stat-card"><div class="stat-num green" id="s-correct">0</div><div class="stat-lbl">Đúng</div></div>
+    <div class="stat-card"><div class="stat-num red" id="s-wrong">0</div><div class="stat-lbl">Sai</div></div>
+    <div class="stat-card"><div class="stat-num purple" id="s-pct">—</div><div class="stat-lbl">Tỉ lệ</div></div>
   </div>
-  <div class="prog-bar"><div class="prog-fill" id="prog" style="width:0%"></div></div>
+
+  <div class="progress-row">
+    <div class="progress-bar"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+    <div class="progress-lbl" id="prog-lbl">0 / 0</div>
+  </div>
+
+  <div class="mode-tabs">
+    <button class="mode-tab active" onclick="setMode('flashcard')">📖 Flashcard</button>
+    <button class="mode-tab" onclick="setMode('mc')">🔢 Trắc nghiệm</button>
+    <button class="mode-tab" onclick="setMode('type')">⌨️ Gõ nghĩa</button>
+    <button class="mode-tab" onclick="setMode('listen')">👂 Đọc→Nghĩa</button>
+    <button class="mode-tab" onclick="setMode('typehanzi')">✍️ Gõ chữ Hán</button>
+  </div>
+
   <div id="quiz-area"></div>
   <div class="nav" id="nav-area"></div>
 </div>
+
 <script>
 const VOCAB={
   HSK1:[{"hanzi":"爱","pinyin":"ài","meaning":"yêu","example_hanzi":"我爱你。","example_viet":"Tôi yêu bạn."},{"hanzi":"八","pinyin":"bā","meaning":"tám","example_hanzi":"他有八个苹果。","example_viet":"Anh ấy có tám quả táo."},{"hanzi":"爸爸","pinyin":"bàba","meaning":"bố","example_hanzi":"我的爸爸很高。","example_viet":"Bố của tôi rất cao."},{"hanzi":"（杯）子","pinyin":"bēizi","meaning":"cốc","example_hanzi":"这是我的杯子。","example_viet":"Đây là cốc của tôi."},{"hanzi":"北京","pinyin":"Běijīng","meaning":"Bắc Kinh","example_hanzi":"北京很大。","example_viet":"Bắc Kinh thì lớn."},{"hanzi":"本","pinyin":"běn","meaning":"cuốn (dùng cho sách)","example_hanzi":"这本书很有趣。","example_viet":"Quyển sách này rất thú vị."},{"hanzi":"不客气","pinyin":"bú kèqì","meaning":"không có gì (đáp lại lời cảm ơn)","example_hanzi":"不客气。","example_viet":"Không có gì."},{"hanzi":"不","pinyin":"bù","meaning":"không","example_hanzi":"他不喜欢吃鱼。","example_viet":"Anh ấy không thích ăn cá."},{"hanzi":"菜","pinyin":"cài","meaning":"món ăn, rau củ","example_hanzi":"我喜欢吃菜。","example_viet":"Tôi thích ăn rau."},{"hanzi":"茶","pinyin":"chá","meaning":"trà","example_hanzi":"我喝茶。","example_viet":"Tôi uống trà."},{"hanzi":"吃","pinyin":"chī","meaning":"ăn","example_hanzi":"我吃苹果。橘子","example_viet":"Tôi ăn táo."},{"hanzi":"出租车","pinyin":"chūzūchē","meaning":"taxi","example_hanzi":"我坐出租车。","example_viet":"Tôi đi taxi."},{"hanzi":"打电话","pinyin":"dǎ diànhuà","meaning":"gọi điện thoại","example_hanzi":"她给我打电话。","example_viet":"Cô ấy gọi điện cho tôi."},{"hanzi":"大","pinyin":"dà","meaning":"lớn, to","example_hanzi":"这件衣服很大。","example_viet":"Cái áo này rất to."},{"hanzi":"的","pinyin":"de","meaning":"của (thuộc tính)","example_hanzi":"这是我的书。","example_viet":"Đây là sách của tôi."},{"hanzi":"点","pinyin":"diǎn","meaning":"giờ (trong thời gian)","example_hanzi":"现在是三点。","example_viet":"Bây giờ là 3 GIỜ"},{"hanzi":"电脑","pinyin":"diànnǎo","meaning":"máy tính","example_hanzi":"我用电脑。","example_viet":"Tôi dùng máy tính."},{"hanzi":"电视","pinyin":"diànshì","meaning":"ti vi","example_hanzi":"电视很大。","example_viet":"Tivi thì lớn."},{"hanzi":"电影","pinyin":"diànyǐng","meaning":"phim","example_hanzi":"我喜欢看电影。","example_viet":"Tôi thích xem phim."},{"hanzi":"东西","pinyin":"dōngxī","meaning":"đồ vật, thứ","example_hanzi":"这是什么东西？","example_viet":"Đây là cái gì?"},{"hanzi":"都","pinyin":"dōu","meaning":"đều","example_hanzi":"我们都去学校。","example_viet":"Chúng tôi đều đi đến trường."},{"hanzi":"读","pinyin":"dú","meaning":"đọc","example_hanzi":"她在读书。","example_viet":"Cô ấy đọc sách rất nhanh."},{"hanzi":"对不起","pinyin":"duìbùqǐ","meaning":"xin lỗi","example_hanzi":"对不起，我迟到了。","example_viet":"Xin lỗi, tôi đến muộn."},{"hanzi":"多","pinyin":"duō","meaning":"nhiều","example_hanzi":"我有很多书。","example_viet":"Tôi có nhiều sách."},{"hanzi":"多少","pinyin":"duōshǎo","meaning":"bao nhiêu","example_hanzi":"这本书多少钱？","example_viet":"Quyển sách này bao nhiêu tiền?"},{"hanzi":"儿子/ 女儿","pinyin":"érzi","meaning":"con trai","example_hanzi":"我的儿子很聪明。","example_viet":"Con trai của tôi rất thông minh."},{"hanzi":"二","pinyin":"èr","meaning":"hai","example_hanzi":"我喜欢“二”数字。","example_viet":"Tôi thích số 2."},{"hanzi":"饭馆","pinyin":"fànguǎn","meaning":"nhà hàng","example_hanzi":"我们去饭馆吃饭。","example_viet":"Chúng tôi đi nhà hàng ăn cơm."},{"hanzi":"飞机","pinyin":"fēijī","meaning":"máy bay","example_hanzi":"飞机很快。","example_viet":"Máy bay rất nhanh."},{"hanzi":"分钟","pinyin":"fēnzhōng","meaning":"phút","example_hanzi":"他等了五分钟。","example_viet":"Anh ấy đợi năm phút."},{"hanzi":"高兴","pinyin":"gāoxìng","meaning":"vui","example_hanzi":"我很高兴。","example_viet":"Tôi rất vui."},{"hanzi":"个","pinyin":"gè","meaning":"cái (đơn vị lượng từ)","example_hanzi":"我有一个钱包。","example_viet":"Tôi có một cái ví tiền."},{"hanzi":"工作","pinyin":"gōngzuò","meaning":"công việc","example_hanzi":"我的工作很忙。","example_viet":"Công việc của tôi rất bận."},{"hanzi":"狗","pinyin":"gǒu","meaning":"chó","example_hanzi":"这只狗很可爱。","example_viet":"Con chó này rất dễ thương."},{"hanzi":"汉语","pinyin":"Hànyǔ","meaning":"tiếng Hán","example_hanzi":"我在学汉语。","example_viet":"Tôi đang học tiếng Trung."},{"hanzi":"好","pinyin":"hǎo","meaning":"tốt, khỏe","example_hanzi":"他很好。","example_viet":"Anh ấy rất tốt."},{"hanzi":"喝","pinyin":"hē","meaning":"uống","example_hanzi":"我喝水。","example_viet":"Tôi uống nước."},{"hanzi":"和","pinyin":"hé","meaning":"và","example_hanzi":"我和你一起去。","example_viet":"Tôi và bạn cùng đi."},{"hanzi":"很","pinyin":"hěn","meaning":"rất","example_hanzi":"这个苹果很甜。","example_viet":"Quả táo này rất ngọt."},{"hanzi":"后面","pinyin":"hòumiàn","meaning":"phía sau","example_hanzi":"我家在后面。","example_viet":"Nhà tôi ở phía sau."},{"hanzi":"回","pinyin":"huí","meaning":"quay lại, về","example_hanzi":"我回家了。","example_viet":"Tôi đã về nhà."},{"hanzi":"会","pinyin":"huì","meaning":"sẽ, biết (kỹ năng)","example_hanzi":"我会说汉语。","example_viet":"Tôi biết nói tiếng Trung."},{"hanzi":"火车站","pinyin":"huǒchēzhàn","meaning":"ga tàu","example_hanzi":"火车站在前面。","example_viet":"Ga tàu ở phía trước."},{"hanzi":"几","pinyin":"jǐ","meaning":"mấy","example_hanzi":"你有几个苹果？","example_viet":"Bạn có mấy quả táo?"},{"hanzi":"家","pinyin":"jiā","meaning":"gia đình, nhà","example_hanzi":"我家有四口人。","example_viet":"Nhà tôi có bốn người."},{"hanzi":"叫","pinyin":"jiào","meaning":"gọi, tên gọi","example_hanzi":"她叫李娜。","example_viet":"Cô ấy tên là Lý Na."},{"hanzi":"今天","pinyin":"jīntiān","meaning":"hôm nay","example_hanzi":"今天是星期一。","example_viet":"Hôm nay là thứ Hai."},{"hanzi":"九","pinyin":"jiǔ","meaning":"chín","example_hanzi":"我有九本书。","example_viet":"Tôi có chín quyển sách."},{"hanzi":"开","pinyin":"kāi","meaning":"mở, khởi động","example_hanzi":"我们开车去。","example_viet":"Chúng tôi đi bằng ô tô."},{"hanzi":"看","pinyin":"kàn","meaning":"xem","example_hanzi":"我喜欢看电影。","example_viet":"Tôi thích xem phim."},{"hanzi":"看见","pinyin":"kànjiàn","meaning":"nhìn thấy","example_hanzi":"我看见你了。","example_viet":"Tôi đã thấy bạn."},{"hanzi":"块","pinyin":"kuài","meaning":"miếng, đồng (tiền)","example_hanzi":"这个苹果两块钱。","example_viet":"Cái táo này hai tệ."},{"hanzi":"来","pinyin":"lái","meaning":"đến","example_hanzi":"明天我来。","example_viet":"Ngày mai tôi đến."},{"hanzi":"老师","pinyin":"lǎoshī","meaning":"giáo viên","example_hanzi":"我的老师很好。","example_viet":"Giáo viên của tôi rất thân thiện."},{"hanzi":"了","pinyin":"le","meaning":"đã (dùng để chỉ sự thay đổi)","example_hanzi":"她去了学校。","example_viet":"Cô ấy đã đi đến trường."},{"hanzi":"冷","pinyin":"lěng","meaning":"lạnh","example_hanzi":"外面很冷。","example_viet":"Bên ngoài rất lạnh."},{"hanzi":"里","pinyin":"lǐ","meaning":"trong","example_hanzi":"我的书在里面。","example_viet":"Sách của tôi ở bên trong."},{"hanzi":"零","pinyin":"líng","meaning":"không (số 0)","example_hanzi":"今天零度。","example_viet":"Hôm nay không độ."},{"hanzi":"六","pinyin":"liù","meaning":"sáu","example_hanzi":"我有六个苹果。","example_viet":"Tôi có sáu quả táo."},{"hanzi":"妈妈","pinyin":"māma","meaning":"mẹ","example_hanzi":"我的妈妈很漂亮。","example_viet":"Mẹ của tôi rất xinh đẹp."},{"hanzi":"吗","pinyin":"ma","meaning":"không (dùng trong câu hỏi)","example_hanzi":"你好吗？","example_viet":"Bạn khỏe không?"},{"hanzi":"买","pinyin":"mǎi","meaning":"mua","example_hanzi":"我买了水果。","example_viet":"Tôi đã mua trái cây."},{"hanzi":"猫","pinyin":"māo","meaning":"mèo","example_hanzi":"这只猫很可爱。","example_viet":"Con mèo này rất dễ thương."},{"hanzi":"没","pinyin":"méi","meaning":"không có, chưa","example_hanzi":"我没看见他。","example_viet":"Tôi không nhìn thấy anh ấy."},{"hanzi":"没关系","pinyin":"méi guānxi","meaning":"không sao, không có gì","example_hanzi":"下雨了，没关系，我们有伞。","example_viet":"Trời mưa rồi, không sao đâu, chúng ta có ô."},{"hanzi":"米饭","pinyin":"mǐfàn","meaning":"cơm","example_hanzi":"我们吃米饭。","example_viet":"Chúng tôi ăn cơm."},{"hanzi":"明天","pinyin":"míngtiān","meaning":"ngày mai","example_hanzi":"明天见。","example_viet":"Ngày mai gặp."},{"hanzi":"名字","pinyin":"míngzi","meaning":"tên","example_hanzi":"你叫什么名字？","example_viet":"Bạn tên là gì?"},{"hanzi":"哪里 (哪儿)","pinyin":"nǎlǐ (nǎr)","meaning":"đâu, chỗ nào","example_hanzi":"你要去哪儿？","example_viet":"Bạn muốn đi đâu?"},{"hanzi":"那","pinyin":"nà","meaning":"đó, kia","example_hanzi":"那个书包很漂亮。","example_viet":"Cái cặp sách đó rất đẹp."},{"hanzi":"呢","pinyin":"ne","meaning":"thì sao? (dùng để hỏi thêm)","example_hanzi":"你呢？","example_viet":"Còn bạn thì sao?"},{"hanzi":"能","pinyin":"néng","meaning":"có thể","example_hanzi":"他能说三种语言。","example_viet":"Anh ấy có thể nói ba ngôn ngữ."},{"hanzi":"你","pinyin":"nǐ","meaning":"bạn","example_hanzi":"你叫什么名字？","example_viet":"Bạn tên là gì?"},{"hanzi":"年","pinyin":"nián","meaning":"năm","example_hanzi":"我结婚三年了。","example_viet":"Tôi kết hôn 3 năm rồi."},{"hanzi":"女儿","pinyin":"nǚ'ér","meaning":"con gái","example_hanzi":"她是我的女儿。","example_viet":"Con bé là con gái của tôi."},{"hanzi":"朋友","pinyin":"péngyou","meaning":"bạn","example_hanzi":"她的朋友很聪明。","example_viet":"Bạn của cô ấy rất thông minh."},{"hanzi":"漂亮","pinyin":"piàoliang","meaning":"đẹp","example_hanzi":"她很漂亮。","example_viet":"Cô ấy rất xinh đẹp."},{"hanzi":"苹果","pinyin":"píngguǒ","meaning":"táo","example_hanzi":"这个苹果很好吃。","example_viet":"Táo này rất ngon."},{"hanzi":"七","pinyin":"qī","meaning":"bảy","example_hanzi":"我有七个朋友。","example_viet":"Tôi có bảy người bạn."},{"hanzi":"钱","pinyin":"qián","meaning":"tiền","example_hanzi":"这本书多少钱？","example_viet":"Cuốn sách này giá bao nhiêu?"},{"hanzi":"前面","pinyin":"qiánmiàn","meaning":"phía trước","example_hanzi":"火车站在前面。","example_viet":"Ga tàu ở phía trước."},{"hanzi":"请","pinyin":"qǐng","meaning":"xin vui lòng, mời","example_hanzi":"请给我菜单。","example_viet":"Xin vui lòng đưa cho tôi thực đơn."},{"hanzi":"去","pinyin":"qù","meaning":"đi","example_hanzi":"我们要去商店。","example_viet":"Chúng tôi phải đến cửa hàng."},{"hanzi":"热","pinyin":"rè","meaning":"nóng","example_hanzi":"天气很热。","example_viet":"Thời tiết rất nóng."},{"hanzi":"人","pinyin":"rén","meaning":"người","example_hanzi":"这个人很友好。","example_viet":"Người này rất thân thiện."},{"hanzi":"认识","pinyin":"rènshi","meaning":"quen biết","example_hanzi":"我认识他。","example_viet":"Tôi quen anh ấy."},{"hanzi":"日","pinyin":"rì","meaning":"ngày","example_hanzi":"今天是几月几日？","example_viet":"Hôm nay là ngày mấy tháng mấy?"},{"hanzi":"三","pinyin":"sān","meaning":"ba","example_hanzi":"我有三本书。","example_viet":"Tôi có ba cuốn sách."},{"hanzi":"商店","pinyin":"shāngdiàn","meaning":"cửa hàng","example_hanzi":"这个商店很大。","example_viet":"Cửa hàng này rất lớn."},{"hanzi":"上","pinyin":"shàng","meaning":"lên","example_hanzi":"他在上楼。","example_viet":"Anh ấy đang lên tầng."},{"hanzi":"上午","pinyin":"shàngwǔ","meaning":"buổi sáng","example_hanzi":"上午我们去学校。","example_viet":"Vào buổi sáng chúng tôi đi học."},{"hanzi":"少","pinyin":"shǎo","meaning":"ít","example_hanzi":"我们还少一个人。","example_viet":"Chúng tôi vẫn thiếu một người."},{"hanzi":"谁","pinyin":"shuí/ shéi","meaning":"ai","example_hanzi":"谁是你的老师？","example_viet":"Ai là giáo viên của bạn?"},{"hanzi":"什么","pinyin":"shénme","meaning":"cái gì","example_hanzi":"你想吃什么？","example_viet":"Bạn muốn ăn gì?"},{"hanzi":"十","pinyin":"shí","meaning":"mười","example_hanzi":"我有十块钱。","example_viet":"Tôi có mười tệ."},{"hanzi":"时候","pinyin":"shíhòu","meaning":"lúc, khi","example_hanzi":"你什么时候来？","example_viet":"Bạn đến lúc nào ?"},{"hanzi":"是","pinyin":"shì","meaning":"là, thì","example_hanzi":"这是一本好书。","example_viet":"Đây là một cuốn sách hay."},{"hanzi":"书","pinyin":"shū","meaning":"sách","example_hanzi":"这本书很有意思。","example_viet":"Cuốn sách này rất thú vị."},{"hanzi":"水","pinyin":"shuǐ","meaning":"nước","example_hanzi":"我喝水。","example_viet":"Tôi uống nước."},{"hanzi":"水果","pinyin":"shuǐguǒ","meaning":"trái cây","example_hanzi":"她喜欢吃水果。","example_viet":"Cô ấy thích ăn trái cây."},{"hanzi":"睡觉","pinyin":"shuìjiào","meaning":"ngủ","example_hanzi":"他每天晚上十点睡觉。","example_viet":"Anh ấy đi ngủ lúc mười giờ tối mỗi ngày."},{"hanzi":"说话","pinyin":"shuōhuà","meaning":"nói chuyện","example_hanzi":"你怎么不说话？","example_viet":"Sao bạn không nói chuyện thế?"},{"hanzi":"四","pinyin":"sì","meaning":"bốn","example_hanzi":"他们四个人去旅行。","example_viet":"Bốn người họ đi du lịch."},{"hanzi":"岁","pinyin":"suì","meaning":"tuổi","example_hanzi":"我今年二十五岁。","example_viet":"Tôi năm nay hai mươi lăm tuổi."},{"hanzi":"他","pinyin":"tā","meaning":"anh ấy, ông ấy","example_hanzi":"他是我的朋友。","example_viet":"Anh ấy là bạn của tôi."},{"hanzi":"她","pinyin":"tā","meaning":"cô ấy, bà ấy","example_hanzi":"她在家里。","example_viet":"Cô ấy ở nhà."},{"hanzi":"太","pinyin":"tài","meaning":"quá","example_hanzi":"今天太热了。","example_viet":"Hôm nay nóng quá."},{"hanzi":"天气","pinyin":"tiānqì","meaning":"thời tiết","example_hanzi":"今天天气很好。","example_viet":"Thời tiết hôm nay rất tốt."},{"hanzi":"听","pinyin":"tīng","meaning":"nghe","example_hanzi":"我喜欢听音乐。","example_viet":"Tôi thích nghe nhạc."},{"hanzi":"同学","pinyin":"tóngxué","meaning":"bạn học","example_hanzi":"我们是同学。","example_viet":"Chúng tôi là bạn học."},{"hanzi":"喂","pinyin":"wèi","meaning":"alo","example_hanzi":"喂，你好吗？","example_viet":"Alo, bạn khỏe không?"},{"hanzi":"我","pinyin":"wǒ","meaning":"tôi","example_hanzi":"我想喝水。","example_viet":"Tôi muốn uống nước."},{"hanzi":"我们","pinyin":"wǒmen","meaning":"chúng tôi","example_hanzi":"我们一起去吧。","example_viet":"Chúng ta cùng đi nhé."},{"hanzi":"五","pinyin":"wǔ","meaning":"năm","example_hanzi":"他有五本书。","example_viet":"Anh ấy có năm cuốn sách."},{"hanzi":"喜欢","pinyin":"xǐhuān","meaning":"thích","example_hanzi":"我喜欢喝咖啡。","example_viet":"Tôi thích uống cà phê."},{"hanzi":"下","pinyin":"xià","meaning":"xuống","example_hanzi":"我在下楼。","example_viet":"Tôi đang xuống lầu."},{"hanzi":"下午","pinyin":"xiàwǔ","meaning":"buổi chiều","example_hanzi":"下午我们去逛街。","example_viet":"uổi chiều, chúng tôi đi dạo phố."},{"hanzi":"下雨","pinyin":"xià yǔ","meaning":"mưa","example_hanzi":"外面下雨了，记得带伞。","example_viet":"Ngoài trời mưa, nhớ mang theo ô."},{"hanzi":"先生","pinyin":"xiānshēng","meaning":"ông, ngài","example_hanzi":"先生，这边请。","example_viet":"Mời anh qua bên này."},{"hanzi":"现在","pinyin":"xiànzài","meaning":"bây giờ","example_hanzi":"我现在很累。","example_viet":"Tôi hiện tại rất mệt."},{"hanzi":"想","pinyin":"xiǎng","meaning":"nghĩ, muốn","example_hanzi":"我想去看电影。","example_viet":"Tôi muốn đi xem phim."},{"hanzi":"小","pinyin":"xiǎo","meaning":"nhỏ","example_hanzi":"这是一只小狗。","example_viet":"Đây là một chú chó con."},{"hanzi":"小姐","pinyin":"xiǎojiě","meaning":"cô (trong cách gọi)","example_hanzi":"小姐，请问这里有洗手间吗？","example_viet":"Cô ơi, xin hỏi ở đây có nhà vệ sinh không?"},{"hanzi":"些","pinyin":"xiē","meaning":"vài","example_hanzi":"我们买了一些水果。","example_viet":"Chúng tôi đã mua một ít trái cây."},{"hanzi":"写","pinyin":"xiě","meaning":"viết","example_hanzi":"我正在写信。","example_viet":"Tôi đang viết thư."},{"hanzi":"谢谢","pinyin":"xièxiè","meaning":"cảm ơn","example_hanzi":"谢谢你的帮助。","example_viet":"Cảm ơn sự giúp đỡ của bạn."},{"hanzi":"星期","pinyin":"xīngqī","meaning":"tuần","example_hanzi":"一个星期就好。","example_viet":"Một tuần là được"},{"hanzi":"学生","pinyin":"xuéshēng","meaning":"học sinh","example_hanzi":"他是一个好学生。","example_viet":"Anh ấy là một học sinh giỏi."},{"hanzi":"学习","pinyin":"xuéxí","meaning":"học tập","example_hanzi":"学习中文很有趣。","example_viet":"Học tiếng Trung rất thú vị."},{"hanzi":"学校","pinyin":"xuéxiào","meaning":"trường học","example_hanzi":"我在学校学习中文。","example_viet":"Tôi học tiếng Trung ở trường."},{"hanzi":"一","pinyin":"yī","meaning":"một","example_hanzi":"一个人在公园散步。","example_viet":"Một người đang đi dạo trong công viên."},{"hanzi":"衣服","pinyin":"yīfu","meaning":"quần áo","example_hanzi":"这件衣服很漂亮。","example_viet":"Bộ quần áo này rất đẹp."},{"hanzi":"医生","pinyin":"yīshēng","meaning":"bác sĩ","example_hanzi":"他是一位医生。","example_viet":"Anh ấy là một bác sĩ."},{"hanzi":"医院","pinyin":"yīyuàn","meaning":"bệnh viện","example_hanzi":"我们去医院看病。","example_viet":"Chúng tôi đến bệnh viện để khám bệnh."},{"hanzi":"椅子 （把）","pinyin":"yǐzi","meaning":"ghế","example_hanzi":"请坐在椅子上。","example_viet":"Xin ngồi lên ghế."},{"hanzi":"月","pinyin":"yuè","meaning":"tháng, mặt trăng","example_hanzi":"这个月我很忙。","example_viet":"Tháng này tôi rất bận."},{"hanzi":"在","pinyin":"zài","meaning":"ở, tại","example_hanzi":"他在学校学习。","example_viet":"Anh ấy học ở trường."},{"hanzi":"再见","pinyin":"zàijiàn","meaning":"tạm biệt","example_hanzi":"我们明天再见。","example_viet":"Chúng ta gặp lại vào ngày mai."},{"hanzi":"怎么","pinyin":"zěnme","meaning":"làm sao, thế nào","example_hanzi":"你怎么了？","example_viet":"Bạn sao vậy?"},{"hanzi":"怎么样","pinyin":"zěnmeyàng","meaning":"như thế nào","example_hanzi":"你的工作怎么样？","example_viet":"Công việc của bạn thế nào?"},{"hanzi":"这","pinyin":"zhè","meaning":"Đây, này","example_hanzi":"这件事怎么样？","example_viet":"Việc này như thế nào?"},{"hanzi":"中国","pinyin":"Zhōngguó","meaning":"Trung Quốc","example_hanzi":"中国有很多美丽的风景。","example_viet":"Trung Quốc có nhiều cảnh đẹp."},{"hanzi":"中午","pinyin":"zhōngwǔ","meaning":"buổi trưa","example_hanzi":"中午我们去吃饭吧。","example_viet":"Buổi trưa chúng ta đi ăn cơm nhé."},{"hanzi":"住","pinyin":"zhù","meaning":"sống, cư trú","example_hanzi":"我住在一个很安静的地方。","example_viet":"Tôi sống ở một nơi rất yên tĩnh."},{"hanzi":"桌子","pinyin":"zhuōzi","meaning":"bàn 张","example_hanzi":"桌子上放着一本书。","example_viet":"Trên bàn có một cuốn sách."},{"hanzi":"字","pinyin":"zì","meaning":"chữ","example_hanzi":"我们要学会写字。","example_viet":"Chúng ta phải học viết chữ."},{"hanzi":"昨天","pinyin":"zuótiān","meaning":"hôm qua","example_hanzi":"昨天我去看了一部电影。","example_viet":"Hôm qua tôi đã đi xem một bộ phim."},{"hanzi":"坐","pinyin":"zuò","meaning":"ngồi","example_hanzi":"我们在公园里坐了一会儿。","example_viet":"Chúng tôi đã ngồi một lúc trong công viên."},{"hanzi":"做","pinyin":"zuò","meaning":"làm","example_hanzi":"他正在做作业。","example_viet":"Anh ấy đang làm bài tập về nhà."}],
@@ -109,26 +196,29 @@ function shuffle(a){return a.sort(()=>Math.random()-.5)}
 
 function setLevel(l){
   level=l;
-  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.getAttribute('onclick').includes("'"+l+"'")));
-  total=correct=wrong=0;words=shuffle([...VOCAB[l]]);idx=0;
-  updateStats();render();
+  document.querySelectorAll('.pill').forEach(b=>b.classList.toggle('active',b.getAttribute('onclick').includes("'"+l+"'")));
+  reset();
 }
-
 function setMode(m){
   mode=m;
-  document.querySelectorAll('.mode-btn').forEach(b=>b.classList.toggle('active',b.getAttribute('onclick').includes("'"+m+"'")));
-  total=correct=wrong=0;words=shuffle([...VOCAB[level]]);idx=0;
+  document.querySelectorAll('.mode-tab').forEach(b=>b.classList.toggle('active',b.getAttribute('onclick').includes("'"+m+"'")));
+  reset();
+}
+function reset(){
+  total=correct=wrong=0;
+  words=shuffle([...VOCAB[level]]);
+  idx=0;revealed=false;mcAnswered=false;typeAnswered=false;
   updateStats();render();
 }
-
 function updateStats(){
   document.getElementById('s-total').textContent=total;
   document.getElementById('s-correct').textContent=correct;
   document.getElementById('s-wrong').textContent=wrong;
   document.getElementById('s-pct').textContent=total>0?Math.round(correct/total*100)+'%':'—';
-  document.getElementById('prog').style.width=(words.length?Math.round(idx/words.length*100):0)+'%';
+  const pct=words.length?Math.round(idx/words.length*100):0;
+  document.getElementById('prog').style.width=pct+'%';
+  document.getElementById('prog-lbl').textContent=idx+'/'+words.length;
 }
-
 function next(){idx=(idx+1)%words.length;revealed=false;mcAnswered=false;typeAnswered=false;render();}
 function prev(){idx=(idx-1+words.length)%words.length;revealed=false;mcAnswered=false;typeAnswered=false;render();}
 
@@ -145,15 +235,23 @@ function render(){
 }
 
 function badge(){return `<span class="badge badge-${level.toLowerCase()}">${level}</span>`;}
-
 function exBox(w){
   if(!w.example_hanzi)return '';
   return `<div class="example-box"><div class="ex-zh">${w.example_hanzi}</div>${w.example_viet?`<div class="ex-vn">🇻🇳 ${w.example_viet}</div>`:''}</div>`;
 }
 
 function renderFlashcard(w,qa,nav){
-  qa.innerHTML=`<div class="card">${badge()}<div class="hanzi" onclick="revealed=true;render()">${w.hanzi}</div><div class="pinyin">${revealed?w.pinyin:''}</div><div class="meaning">${revealed?w.meaning:''}</div>${revealed?exBox(w):''}<div class="hint">${revealed?'':'Nhấn vào chữ để xem nghĩa'}</div></div>`;
-  nav.innerHTML=`<button class="btn" onclick="prev()">← Trước</button><span style="font-size:13px;color:#888;padding:0 .5rem">${idx+1}/${words.length}</span><button class="btn" onclick="next()">Tiếp →</button>`;
+  qa.innerHTML=`
+    <div class="flashcard" onclick="revealed=true;render()">
+      ${badge()}
+      <div class="hanzi">${w.hanzi}</div>
+      ${revealed?`<div class="pinyin">${w.pinyin}</div><div class="meaning">${w.meaning}</div>${exBox(w)}`
+        :`<div class="tap-hint"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5"/></svg> Nhấn để xem nghĩa</div>`}
+    </div>`;
+  nav.innerHTML=`
+    <button class="btn" onclick="prev()">← Trước</button>
+    <span class="nav-lbl">${idx+1} / ${words.length}</span>
+    <button class="btn" onclick="next()">Tiếp →</button>`;
 }
 
 function renderMC(w,qa,nav){
@@ -163,10 +261,16 @@ function renderMC(w,qa,nav){
     mcChoices=shuffle([w.meaning,...pool.slice(0,3).map(x=>x.meaning)]);
   }
   const choiceHtml=mcChoices.map(c=>`<button class="choice" onclick="answerMC(this)" data-val="${c.replace(/"/g,'&quot;')}" ${mcAnswered?'disabled':''}>${c}</button>`).join('');
-  qa.innerHTML=`<div class="card">${badge()}<div class="hanzi">${w.hanzi}</div><div class="pinyin">${w.pinyin}</div><div class="hint">Chọn nghĩa đúng</div></div><div class="choices">${choiceHtml}</div><div id="mc-ex"></div>`;
+  qa.innerHTML=`
+    <div class="flashcard" style="cursor:default;min-height:200px">
+      ${badge()}
+      <div class="hanzi">${w.hanzi}</div>
+      <div class="pinyin">${w.pinyin}</div>
+    </div>
+    <div class="choices">${choiceHtml}</div>
+    <div id="mc-ex"></div>`;
   nav.innerHTML=mcAnswered?'<button class="btn primary" onclick="next()">Tiếp theo →</button>':'';
 }
-
 function answerMC(el){
   if(mcAnswered)return;
   mcAnswered=true;
@@ -186,56 +290,88 @@ function answerMC(el){
 }
 
 function renderType(w,qa,nav){
-  qa.innerHTML=`<div class="card">${badge()}<div class="hanzi">${w.hanzi}</div><div class="pinyin">${w.pinyin}</div><div class="hint">Gõ nghĩa tiếng Việt</div></div><div class="input-row"><input class="ans-input" id="type-input" placeholder="Nhập nghĩa..." ${typeAnswered?'disabled':''} onkeydown="if(event.key==='Enter')checkType()">${!typeAnswered?'<button class="btn primary" onclick="checkType()">Kiểm tra</button>':''}</div><div id="type-fb"></div><div id="type-ex"></div>`;
+  qa.innerHTML=`
+    <div class="flashcard" style="cursor:default;min-height:200px">
+      ${badge()}
+      <div class="hanzi">${w.hanzi}</div>
+      <div class="pinyin">${w.pinyin}</div>
+      <div style="font-size:13px;color:var(--muted);margin-top:.25rem">Gõ nghĩa tiếng Việt bên dưới</div>
+    </div>
+    <div class="input-wrap">
+      <input class="ans-input" id="type-input" placeholder="Nhập nghĩa tiếng Việt..." ${typeAnswered?'disabled':''} onkeydown="if(event.key==='Enter')checkType()">
+      ${!typeAnswered?'<button class="btn primary" onclick="checkType()">Kiểm tra</button>':''}
+    </div>
+    <div id="type-fb"></div><div id="type-ex"></div>`;
   nav.innerHTML=typeAnswered?'<button class="btn primary" onclick="next()">Tiếp theo →</button>':'';
   if(!typeAnswered)setTimeout(()=>{const el=document.getElementById('type-input');if(el)el.focus();},50);
 }
-
 function checkType(){
   if(typeAnswered)return;
-  const inp=document.getElementById('type-input');
-  if(!inp)return;
+  const inp=document.getElementById('type-input');if(!inp)return;
   const val=inp.value.trim().toLowerCase();
   const w=words[idx];
   const meanings=w.meaning.toLowerCase().split(/[,，\/]/);
   const isOk=meanings.some(m=>val&&(m.trim().includes(val)||val.includes(m.trim())));
   typeAnswered=true;total++;
   if(isOk)correct++;else wrong++;
-  updateStats();
-  inp.disabled=true;
-  document.getElementById('type-fb').innerHTML=`<div class="feedback ${isOk?'ok':'bad'}">${isOk?'✓ Đúng rồi!':'✗ Sai. Nghĩa đúng: <strong>'+w.meaning+'</strong>'}</div>`;
+  updateStats();inp.disabled=true;
+  document.getElementById('type-fb').innerHTML=`<div class="feedback ${isOk?'ok':'bad'}">${isOk?'✓ Đúng rồi!':'✗ Sai — Nghĩa đúng: '+w.meaning}</div>`;
   document.getElementById('nav-area').innerHTML='<button class="btn primary" onclick="next()">Tiếp theo →</button>';
   document.getElementById('type-ex').innerHTML=exBox(w);
 }
 
 function renderListen(w,qa,nav){
-  qa.innerHTML=`<div class="card">${badge()}<div style="font-size:13px;color:#888;margin-bottom:.5rem">Nghĩa tiếng Việt:</div><div style="font-size:20px;font-weight:600">${w.meaning}</div>${w.example_viet?`<div style="font-size:13px;color:#888;margin-top:.5rem">🇻🇳 ${w.example_viet}</div>`:''}<div class="hint" style="margin-top:.75rem">Đoán chữ Hán</div></div>${!revealed?'<button class="btn" style="width:100%;margin-bottom:.5rem" onclick="revealed=true;render()">Xem đáp án</button>':`<div class="card" style="min-height:auto;padding:1rem"><div class="hanzi" style="font-size:42px">${w.hanzi}</div><div class="pinyin">${w.pinyin}</div>${exBox(w)}</div><div style="display:flex;gap:.5rem;margin-bottom:.5rem"><button class="btn ok" style="flex:1" onclick="listenAnswer(true)">✓ Đúng</button><button class="btn bad" style="flex:1" onclick="listenAnswer(false)">✗ Sai</button></div>`}`;
-  nav.innerHTML=`<span style="font-size:13px;color:#888">${idx+1}/${words.length}</span>`;
+  qa.innerHTML=`
+    <div class="flashcard" style="cursor:default;min-height:220px">
+      ${badge()}
+      <div style="font-size:13px;color:var(--muted);font-weight:500">NGHĨA TIẾNG VIỆT</div>
+      <div class="listen-meaning">${w.meaning}</div>
+      ${w.example_viet?`<div class="listen-sub">🇻🇳 ${w.example_viet}</div>`:''}
+      <div class="tap-hint" style="margin-top:.75rem">Đoán chữ Hán tương ứng</div>
+    </div>
+    ${!revealed
+      ?'<button class="btn primary" style="width:100%;margin-bottom:.75rem;padding:.75rem" onclick="revealed=true;render()">Xem đáp án</button>'
+      :`<div class="answer-card">
+          <div class="hanzi" style="font-size:52px">${w.hanzi}</div>
+          <div class="pinyin" style="color:var(--purple-mid);font-size:16px;margin-top:.25rem">${w.pinyin}</div>
+          ${exBox(w)}
+        </div>
+        <div class="self-eval">
+          <button class="btn ok" style="flex:1;padding:.75rem" onclick="listenAnswer(true)">✓ Đúng</button>
+          <button class="btn bad" style="flex:1;padding:.75rem" onclick="listenAnswer(false)">✗ Sai</button>
+        </div>`}`;
+  nav.innerHTML=`<span class="nav-lbl">${idx+1} / ${words.length}</span>`;
 }
-
 function listenAnswer(ok){total++;if(ok)correct++;else wrong++;updateStats();next();}
 
-
 function renderTypeHanzi(w,qa,nav){
-  qa.innerHTML=`<div class="card">${badge()}<div style="font-size:13px;color:#888;margin-bottom:.5rem">Nghĩa tiếng Việt:</div><div style="font-size:20px;font-weight:600;margin-bottom:.25rem">${w.meaning}</div><div class="hint" style="margin-top:.5rem">Gõ chữ Hán tương ứng</div></div><div class="input-row"><input class="ans-input" id="hz-input" placeholder="Nhập chữ Hán..." ${typeAnswered?'disabled':''} style="font-size:22px;text-align:center;letter-spacing:4px" onkeydown="if(event.key==='Enter')checkHanzi()">${!typeAnswered?'<button class="btn primary" onclick="checkHanzi()">Kiểm tra</button>':''}</div><div id="hz-fb"></div><div id="hz-ex"></div>`;
+  qa.innerHTML=`
+    <div class="flashcard" style="cursor:default;min-height:220px">
+      ${badge()}
+      <div style="font-size:13px;color:var(--muted);font-weight:500">NGHĨA TIẾNG VIỆT</div>
+      <div class="listen-meaning">${w.meaning}</div>
+      ${w.example_viet?`<div class="listen-sub">🇻🇳 ${w.example_viet}</div>`:''}
+      <div style="font-size:13px;color:var(--muted);margin-top:.5rem">Gõ chữ Hán tương ứng bên dưới</div>
+    </div>
+    <div class="input-wrap">
+      <input class="ans-input hanzi-input" id="hz-input" placeholder="Nhập chữ Hán..." ${typeAnswered?'disabled':''} onkeydown="if(event.key==='Enter')checkHanzi()">
+      ${!typeAnswered?'<button class="btn primary" onclick="checkHanzi()">Kiểm tra</button>':''}
+    </div>
+    <div id="hz-fb"></div><div id="hz-ex"></div>`;
   nav.innerHTML=typeAnswered?'<button class="btn primary" onclick="next()">Tiếp theo →</button>':'';
   if(!typeAnswered)setTimeout(()=>{const el=document.getElementById('hz-input');if(el)el.focus();},50);
 }
-
 function checkHanzi(){
   if(typeAnswered)return;
-  const inp=document.getElementById('hz-input');
-  if(!inp)return;
+  const inp=document.getElementById('hz-input');if(!inp)return;
   const val=inp.value.trim();
   const w=words[idx];
-  // Normalize: strip brackets/spaces for comparison
-  const normalize=s=>s.replace(/[（）()\s/]/g,'').toLowerCase();
-  const isOk=val.length>0&&(normalize(val)===normalize(w.hanzi)||normalize(w.hanzi)===normalize(val));
+  const normalize=s=>s.replace(/[（）() /]/g,'');
+  const isOk=val.length>0&&normalize(val)===normalize(w.hanzi);
   typeAnswered=true;total++;
   if(isOk)correct++;else wrong++;
-  updateStats();
-  inp.disabled=true;
-  document.getElementById('hz-fb').innerHTML=`<div class="feedback ${isOk?'ok':'bad'}">${isOk?'✓ Đúng rồi!':'✗ Sai. Chữ Hán đúng: <span style="font-size:22px;font-weight:600;letter-spacing:2px">'+w.hanzi+'</span> ('+w.pinyin+')'}</div>`;
+  updateStats();inp.disabled=true;
+  document.getElementById('hz-fb').innerHTML=`<div class="feedback ${isOk?'ok':'bad'}">${isOk?'✓ Đúng rồi!':'✗ Sai — Chữ Hán đúng: <span style="font-size:22px;font-weight:700;letter-spacing:2px">'+w.hanzi+'</span> ('+w.pinyin+')'}</div>`;
   document.getElementById('nav-area').innerHTML='<button class="btn primary" onclick="next()">Tiếp theo →</button>';
   document.getElementById('hz-ex').innerHTML=exBox(w);
 }
