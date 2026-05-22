@@ -83,6 +83,7 @@ h1{font-size:20px;font-weight:600;margin-bottom:1.25rem}
     <button class="mode-btn" onclick="setMode('mc')">🔢 Trắc nghiệm</button>
     <button class="mode-btn" onclick="setMode('type')">⌨️ Gõ nghĩa</button>
     <button class="mode-btn" onclick="setMode('listen')">👂 Đọc→Nghĩa</button>
+    <button class="mode-btn" onclick="setMode('typehanzi')">✍️ Gõ chữ Hán</button>
   </div>
   <div class="prog-bar"><div class="prog-fill" id="prog" style="width:0%"></div></div>
   <div id="quiz-area"></div>
@@ -139,7 +140,8 @@ function render(){
   if(mode==='flashcard')renderFlashcard(w,qa,nav);
   else if(mode==='mc')renderMC(w,qa,nav);
   else if(mode==='type')renderType(w,qa,nav);
-  else renderListen(w,qa,nav);
+  else if(mode==='listen')renderListen(w,qa,nav);
+  else renderTypeHanzi(w,qa,nav);
 }
 
 function badge(){return `<span class="badge badge-${level.toLowerCase()}">${level}</span>`;}
@@ -212,6 +214,31 @@ function renderListen(w,qa,nav){
 }
 
 function listenAnswer(ok){total++;if(ok)correct++;else wrong++;updateStats();next();}
+
+
+function renderTypeHanzi(w,qa,nav){
+  qa.innerHTML=`<div class="card">${badge()}<div style="font-size:13px;color:#888;margin-bottom:.5rem">Nghĩa tiếng Việt:</div><div style="font-size:20px;font-weight:600;margin-bottom:.25rem">${w.meaning}</div><div style="font-size:14px;color:#888">${w.pinyin}</div><div class="hint" style="margin-top:.5rem">Gõ chữ Hán tương ứng</div></div><div class="input-row"><input class="ans-input" id="hz-input" placeholder="Nhập chữ Hán..." ${typeAnswered?'disabled':''} style="font-size:22px;text-align:center;letter-spacing:4px" onkeydown="if(event.key==='Enter')checkHanzi()">${!typeAnswered?'<button class="btn primary" onclick="checkHanzi()">Kiểm tra</button>':''}</div><div id="hz-fb"></div><div id="hz-ex"></div>`;
+  nav.innerHTML=typeAnswered?'<button class="btn primary" onclick="next()">Tiếp theo →</button>':'';
+  if(!typeAnswered)setTimeout(()=>{const el=document.getElementById('hz-input');if(el)el.focus();},50);
+}
+
+function checkHanzi(){
+  if(typeAnswered)return;
+  const inp=document.getElementById('hz-input');
+  if(!inp)return;
+  const val=inp.value.trim();
+  const w=words[idx];
+  // Normalize: strip brackets/spaces for comparison
+  const normalize=s=>s.replace(/[（）()\s/]/g,'').toLowerCase();
+  const isOk=val.length>0&&(normalize(val)===normalize(w.hanzi)||normalize(w.hanzi)===normalize(val));
+  typeAnswered=true;total++;
+  if(isOk)correct++;else wrong++;
+  updateStats();
+  inp.disabled=true;
+  document.getElementById('hz-fb').innerHTML=`<div class="feedback ${isOk?'ok':'bad'}">${isOk?'✓ Đúng rồi!':'✗ Sai. Chữ Hán đúng: <span style="font-size:22px;font-weight:600;letter-spacing:2px">'+w.hanzi+'</span> ('+w.pinyin+')'}</div>`;
+  document.getElementById('nav-area').innerHTML='<button class="btn primary" onclick="next()">Tiếp theo →</button>';
+  document.getElementById('hz-ex').innerHTML=exBox(w);
+}
 
 words=shuffle([...VOCAB['HSK1']]);
 render();
